@@ -1,0 +1,29 @@
+{
+  "name": "thumbsup-tagger-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "./node_modules/eslint/bin/eslint.js . --ext .js --ignore-pattern node_modules/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://root@192.168.12.1:/tmp/mnt/1A84B8C784B8A723/backup/dev/thumbsup-tagger-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "sqlite": "^3.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0"
+  }
+}
