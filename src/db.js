@@ -1,11 +1,7 @@
 // vim: set expandtab tabstop=2 shiftwidth=2 :
-const sqlite = require('sqlite')
 const path = require('path')
+const Database = require('better-sqlite3')
+const dbPath = path.join(__dirname, '..', 'foobar.db')
+const db = new Database(dbPath, { verbose: console.log })
 
-async function open() {
-  let p = ('./foo.db')
-  console.log(path.resolve(p))
-  return sqlite.open(p);
-}
-
-module.exports = open() 
+module.exports = db;
