@@ -30,12 +30,12 @@ app.get('/', async (req, res) => {
 app.get('/init', (req, res) => {
   db.exec('CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY, name VARCHAR(255), UNIQUE (name))')
   db.exec('CREATE TABLE IF NOT EXISTS file (id INTEGER PRIMARY KEY, name VARCHAR(255), UNIQUE (name))')
-  db.exec('CREATE TABLE IF NOT EXISTS file_tag (id_file INTEGER, id_tag INTEGER, PRIMARY KEY (id_file, id_tag))')
+  db.exec('CREATE TABLE IF NOT EXISTS file_tag (id_file INTEGER, id_tag INTEGER, timestamp INTEGER, PRIMARY KEY (id_file, id_tag))')
   res.send('OK')
 })
 
 app.get('/tags/', (req, res) => {
-  const tag = db.prepare('SELECT tag.name, COALESCE(count(*), 0) AS cnt FROM tag LEFT JOIN file_tag ON tag.id = file_tag.id_tag GROUP BY tag.id ORDER BY cnt DESC').all()
+  const tag = db.prepare('SELECT tag.name, COALESCE(count(*), 0) AS cnt, MAX(timestamp) AS last_used FROM tag LEFT JOIN file_tag ON tag.id = file_tag.id_tag GROUP BY tag.id ORDER BY cnt DESC').all()
   res.send(JSON.stringify(tag))
 })
 
@@ -89,7 +89,7 @@ app.post('/save/', (req, res) => {
     file = db.prepare('SELECT last_insert_rowid()').get()
   }
   db.prepare('DELETE FROM file_tag WHERE id_file = ?').run("" + file.id)
-  db.prepare('INSERT INTO file_tag SELECT ?, id FROM tag WHERE name IN (' + inExpr.join(',') + ')')
+  db.prepare('INSERT INTO file_tag SELECT ?, id, datetime() FROM tag WHERE name IN (' + inExpr.join(',') + ')')
     .run(["" + file.id].concat(collection))
   db.exec('COMMIT')
  
